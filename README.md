@@ -9,4 +9,4 @@
 ## 💾 System Architecture
 
 - Flow of System:
-<iframe frameborder="0" style="width:100%;height:163px;" src="https://viewer.diagrams.net/?highlight=0000ff&nav=1&title=EdTech-Flow.drawio#Uhttps%3A%2F%2Fdrive.google.com%2Fuc%3Fid%3D1MSTPiuUy75_BSu6BqCblzmXcGbBXH5E1%26export%3Ddownload"></iframe>
+![image](./readme-assets/EdTech-Flow.drawio.svg)
