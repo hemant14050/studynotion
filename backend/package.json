@@ -1,7 +1,7 @@
 {
-  "name": "edtech_backend",
+  "name": "studynotion_backend",
   "version": "1.0.0",
-  "description": "This is a backend for EdTech Platform.",
+  "description": "This is a backend for studynotion.",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
