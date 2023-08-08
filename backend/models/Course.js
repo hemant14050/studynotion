@@ -29,19 +29,33 @@ const courseSchema = new mongoose.Schema({
             ref: "RatingAndReview",
         }
     ],
+    price: {
+        type: Number,
+    },
     thumbnail: {
         type: String,
     },
-    tag: {
+    category: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: "Tag",
+        ref: "Category",
+    },
+    tags: {
+        type: String,
     },
     studentsEnrolled: [
         {
             type: mongoose.Schema.Types.ObjectId,
             ref: "User",
         }
-    ]
+    ],
+    instructions: {
+        type: [String],
+    },
+    status: {
+        type: String,
+        enum: ["Draft", "Published"],
+        default: "Draft",
+    },
 });
 
 module.exports = mongoose.model("Course", courseSchema);

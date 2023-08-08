@@ -25,6 +25,14 @@ const userSchema = new mongoose.Schema({
         enum: ["Admin", "Student", "Instructor"],
         required: true,
     },
+    active: {
+        type: Boolean,
+        default: true,
+    },
+    approved: {
+        type: Boolean,
+        default: true,
+    },
     additionalDetailes: {
         type: mongoose.Schema.Types.ObjectId,
         ref: "Profile",
@@ -52,6 +60,9 @@ const userSchema = new mongoose.Schema({
             ref: "CourseProgress",
         }
     ],
+    // timestamps to see when the user was created and updated
+}, {
+    timestamps: true,
 });
 
 module.exports = mongoose.model("User", userSchema);
