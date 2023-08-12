@@ -27,7 +27,7 @@ exports.resetPasswordToken = async(req, res) => {
         // update user by adding token and expiration
         const updatedUserDetails = await User.findOneAndUpdate({email: email}, {
             token: token,
-            resetPasswordToken: Date.now() + 5*60*1000,
+            resetPasswordToken: Date.now() + 2*60*60*1000,
         }, {new: true});
         // new: true for update doc to return
 
@@ -37,7 +37,7 @@ exports.resetPasswordToken = async(req, res) => {
         await mailSender(
             email, 
             "Password Reset Link", 
-            `Password Reset Link: ${url}`);
+            `Password Reset Link: ${url}. Please click on this link to reset your password.`);
         // return response
         return res.status(200).json({
             success: true,
@@ -82,7 +82,7 @@ exports.resetPassword = async(req, res) => {
         }
         // check token expires
         if(userDetails.resetPasswordExpires < Date.now()) {
-            return res.status(401).json({
+            return res.status(403).json({
                 success: false,
                 message: "Token expired, please regenerate"
             });

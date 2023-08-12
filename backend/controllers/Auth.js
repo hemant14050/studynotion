@@ -2,7 +2,9 @@ const User = require("../models/User");
 const OTP = require("../models/OTP");
 const otpGenerator = require("otp-generator");
 const bcrypt = require("bcrypt");
+const Profile = require("../models/Profile");
 const jwt = require("jsonwebtoken");
+const mailSender = require("../utils/mailSender");
 require("dotenv").config();
 
 //sendOTP
@@ -54,6 +56,7 @@ exports.sendOTP = async (req, res) => {
         })
 
     } catch(err) {
+        console.log("Error: ", err);
         return res.status(500).json({
             success: false,
             message: "Internal server error",
@@ -78,7 +81,7 @@ exports.signUp = async(req, res) => {
 
         // match 2 password
         if(password !== confirmPassword) {
-            return res.status(401).json({
+            return res.status(400).json({
                 success: false,
                 message: "Password and Confirm password does not match.",
             });
@@ -97,12 +100,12 @@ exports.signUp = async(req, res) => {
         const recentOtp = await OTP.find({email}).sort({createdAt: -1}).limit(1);
         console.log("recentOtp: ", recentOtp);
         // validate otp
-        if(recentOtp.length == 0) {
+        if(recentOtp.length === 0) {
             return res.status(400).json({
                 success: false,
-                message: "OTP Not Found",
+                message: "OTP is not valid",
             });
-        } else if(otp !== recentOtp.otp) {
+        } else if(otp !== recentOtp[0].otp) {
             // invalid otp
             return res.status(400).json({
                 success: false,
@@ -126,7 +129,7 @@ exports.signUp = async(req, res) => {
             email, 
             password: hashedPassword, 
             accountType,
-            additionalDetailes: profileDetailes,
+            additionalDetailes: profileDetailes._id,
             image: `https://api.dicebear.com/5.x/initials/svg?seed=${firstName}%20${lastName}`,
         }; 
         const newUser = await User.create(userPayload);
@@ -136,6 +139,7 @@ exports.signUp = async(req, res) => {
         return res.status(200).json({
             success: true,
             message: "User is registered successfully",
+            user: newUser,
         });
 
     } catch(err) {
@@ -154,14 +158,16 @@ exports.login = async(req, res) => {
         const {email, password} = req.body;
         // validate data
         if(!email || !password) {
-            return res.status(403).json({
+            // 400 Bad Request
+            return res.status(400).json({
                 success: false,
                 message: "All fields are required!"
             });
         }
         // check user exists
-        const user = await User.findOne({email});
+        const user = await User.findOne({email}).populate("additionalDetailes");
         if(!user) {
+            // 401 Unauthorized
             return res.status(401).json({
                 success: false,
                 message: "User not registered, Please signUP"
@@ -172,18 +178,19 @@ exports.login = async(req, res) => {
             const payload = {
                 email: user.email,
                 id: user._id,
-                accountType: user.accountType
+                accountType: user.accountType,
             }
             
             const token = jwt.sign(payload, process.env.JWT_SECRETE, {
-                expiresIn: "2h",
+                expiresIn: "24h",
             });
             user.token = token;
             user.password = undefined;
 
             // create cookie and send response
             const options = {
-                expires: new Date(Data.now() + 3*24*60*60*100),
+                expires: new Date(Data.now() + 3*24*60*60*1000),
+                httpOnly: true,
             }
             res.cookie("token", token, options).status(200).json({
                 success: true,
@@ -201,6 +208,7 @@ exports.login = async(req, res) => {
 
     } catch(err) {
         console.log("Error in login: ", err);
+        // 500 Internal Server Error
         return res.status(500).json({
             success: false,
             message: "Internal Server Error"
@@ -211,9 +219,11 @@ exports.login = async(req, res) => {
 //change password
 exports.changePassword = async(req, res) => {
     try {
+        // get user data req.user
+        const userDetails = await User.findById(req.user.id);
         // get data from req body
         // get oldPassword, newPassword, confirmNewPassword
-        const {email, oldPassword, newPassword, confirmNewPassword} = req.body;
+        const {oldPassword, newPassword, confirmNewPassword} = req.body;
         // validation
         if(!email || !oldPassword || !newPassword || !confirmNewPassword) {
             return res.status(401).json({
@@ -228,8 +238,6 @@ exports.changePassword = async(req, res) => {
                 message: "New password and confirm new Password should match"
             });
         }
-        // pass match
-        const userDetails = await User.findOne({email});
         if(!userDetails) {
             return res.status(401).json({
                 success: false,
@@ -239,10 +247,27 @@ exports.changePassword = async(req, res) => {
         if(await bcrypt.compare(userDetails.password, password)) {
             const hashedNewPassword = await bcrypt.hash(newPassword, 10);
             // update in db by encrypting
-            const upadateUserDetails = await User.findOneAndUpdate({email: email},
+            const upadatedUserDetails = await User.findOneAndUpdate(req.user.id,
                 {password: hashedNewPassword},
                 {new: true});
-            
+
+            // send mail password Updated successfully
+            try {
+                const emailResponse = await mailSender(upadatedUserDetails.email, 
+                    `StudyNotion - Password Updated`,
+                    `Password updated for user ${upadatedUserDetails.firstName} ${upadatedUserDetails.lastName}`
+                    );
+
+                console.log("Email sent successfully: ", emailResponse);
+
+            } catch(err) {
+                console.log("Error while sending mail: ", err);
+                return res.status(500).json({
+                    success: false,
+                    message: "Error occurred while sending email",
+                });
+            }
+                
             return res.status(200).json({
                 success: false,
                 message: "Password updated successfully!"
