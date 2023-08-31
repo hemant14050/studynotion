@@ -27,15 +27,21 @@ exports.createSection = async(req, res) => {
                     path: "subSection",
                 },
             }).exec();
-            
+        
+        if(!updatedCourseDetails) {
+            return res.status(401).json({
+                success: false,
+                message: "Could not update course",
+            });
+        }
         // return response
         return res.status(200).json({
-            success: success,
+            success: true,
             updatedCourseDetails: updatedCourseDetails,
             message: "Section created successfully!",
         });
-
     } catch(err) {
+        console.log("Error: ", err);
         return res.status(500).json({
             success: false,
             message: "Internal server Error",
@@ -82,7 +88,7 @@ exports.deleteSection = async(req, res) => {
     try {
         // ID in params
         // fetch sectionId from req.body
-        const {sectionId} = req.params;
+        const {sectionId} = req.body;
         const {courseId} = req.body;
         // delete from db
         await Section.findByIdAndDelete(sectionId);

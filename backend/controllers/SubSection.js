@@ -33,6 +33,13 @@ exports.createSubSection = async(req, res) => {
                 }
             },
             {new: true}).populate("subSection"); 
+        
+        if(!sectionUpdateDetails) {
+            return res.status(400).json({
+                success: false,
+                message: "Could not update section"
+            });
+        }
         // return res
         return res.status(200).json({
             success: true,
@@ -41,6 +48,7 @@ exports.createSubSection = async(req, res) => {
         });
 
     } catch(err) {
+        console.log(err);
         return res.status(500).json({
             success: false,
             message: "Something wents wrong"

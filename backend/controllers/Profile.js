@@ -9,7 +9,7 @@ exports.updateProfile = async(req, res) => {
         // get userId
         const userId = req.user.id;
         // get data from req body
-        const {dateOfBirth="", about="", contactNumber} = req.body;
+        const {dateOfBirth="", gender="", about="", contactNumber} = req.body;
         // validation
         if(!contactNumber || !userId) {
             return res.status(403).json({
@@ -38,6 +38,7 @@ exports.updateProfile = async(req, res) => {
         });
 
     } catch(err) {
+        console.log(err);
         return res.status(500).json({
             success: false,
             message: "Something wents wrong"
@@ -78,7 +79,7 @@ exports.deleteAccount = async(req, res) => {
 
         // return res
         return res.status(200).json({
-            success: false,
+            success: true,
             message: "User Deleted successfully!"
         });
 
@@ -115,6 +116,7 @@ exports.updateProfilePicture = async (req, res) => {
     try {
       const displayPicture = req.files.displayPicture;
       const userId = req.user.id;
+      // console.log(displayPicture);
       const image = await uploadFileToCloudinary(
         displayPicture,
         process.env.FOLDER_NAME,
@@ -134,6 +136,7 @@ exports.updateProfilePicture = async (req, res) => {
       });
 
     } catch(err) {
+      console.log(err);
       return res.status(500).json({
         success: false,
         message: "Internal server error",

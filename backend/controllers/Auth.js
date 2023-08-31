@@ -30,7 +30,7 @@ exports.sendOTP = async (req, res) => {
             lowerCaseAlphabets: false,
             specialChars: false,
         });
-        console.log("OTP generated: ", otp);
+        // console.log("OTP generated: ", otp);
         
         //check otp is unique or not  -- THIS CODE BLOCK MAKES TO TO MUCH DB CALLS
         const resultOTP = await OTP.findOne({otp: otp});
@@ -47,13 +47,13 @@ exports.sendOTP = async (req, res) => {
         const otpPayload = {email, otp};
         // create an entry in DB
         const newOTP = await OTP.create(otpPayload);
-        console.log("newOTP: ", newOTP);
+        // console.log("newOTP: ", newOTP);
 
         //return response successfully
         res.status(200).json({
             success: true,
             message: "OTP sent Successfully",
-        })
+        });
 
     } catch(err) {
         console.log("Error: ", err);
@@ -70,9 +70,10 @@ exports.signUp = async(req, res) => {
 
         // fetch data from req body
         const {firstName, lastName, email, password, confirmPassword, accountType, contactNumber, otp} = req.body;
+        console.log("Printing: ", confirmPassword, otp);
 
         // validate data
-        if(!firstName || !lastName || !email || !password || !confirmPassword || !contactNumber || !otp) {
+        if(!firstName || !lastName || !email || !password || !confirmPassword || !accountType || !contactNumber || !otp) {
             return res.status(403).json({
                 success: false,
                 message: "All fields are required",
@@ -98,7 +99,7 @@ exports.signUp = async(req, res) => {
 
         // find most recent OTP stored for user
         const recentOtp = await OTP.find({email}).sort({createdAt: -1}).limit(1);
-        console.log("recentOtp: ", recentOtp);
+        // console.log("recentOtp: ", recentOtp);
         // validate otp
         if(recentOtp.length === 0) {
             return res.status(400).json({
@@ -181,7 +182,7 @@ exports.login = async(req, res) => {
                 accountType: user.accountType,
             }
             
-            const token = jwt.sign(payload, process.env.JWT_SECRETE, {
+            const token = jwt.sign(payload, process.env.JWT_SECRET, {
                 expiresIn: "24h",
             });
             user.token = token;
@@ -189,7 +190,7 @@ exports.login = async(req, res) => {
 
             // create cookie and send response
             const options = {
-                expires: new Date(Data.now() + 3*24*60*60*1000),
+                expires: new Date(Date.now() + 3*24*60*60*1000),
                 httpOnly: true,
             }
             res.cookie("token", token, options).status(200).json({
@@ -197,7 +198,7 @@ exports.login = async(req, res) => {
                 token,
                 user,
                 message: "User logged in successfully"
-            })
+            });
         } else {
             return res.status(401).json({
                 success: false,
@@ -258,7 +259,7 @@ exports.changePassword = async(req, res) => {
                     `Password updated for user ${upadatedUserDetails.firstName} ${upadatedUserDetails.lastName}`
                     );
 
-                console.log("Email sent successfully: ", emailResponse);
+                // console.log("Email sent successfully: ", emailResponse);
 
             } catch(err) {
                 console.log("Error while sending mail: ", err);

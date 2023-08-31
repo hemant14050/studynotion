@@ -7,8 +7,9 @@ const {uploadFileToCloudinary} = require("../utils/cloudinaryUploader");
 exports.createCourse = async(req, res) => {
     try {
         // fetch all data
-        const {courseName, courseDescription, whatYouWillLearn, price, tag, category, status, instructions} = req.body; 
+        const {courseName, courseDescription, whatYouWillLearn, price, tag, category, instructions} = req.body; 
         // get thumbnail
+        let status = req.body.status;
         const thumbnail = req.files.thumbnailImage;
         // validation
         if(!courseName || !courseDescription || !whatYouWillLearn || !price || !category) {
@@ -31,7 +32,7 @@ exports.createCourse = async(req, res) => {
             });
         }
         // check give category is valid or not
-        const categoryDetails = await Tag.findById(category);
+        const categoryDetails = await Category.findById(category);
         if(!categoryDetails) {
             return res.status(404).json({
                 success: false,
@@ -40,7 +41,7 @@ exports.createCourse = async(req, res) => {
         }
 
         // upload image to cloudinary
-        const thumbnailImage = await uploadFileToCloudinary(thumbnail, process.env.FOLDER_NAME);
+        const thumbnailImageRes = await uploadFileToCloudinary(thumbnail, process.env.FOLDER_NAME);
 
         // make entry in db
         const newCourseDetails = await Course.create({
@@ -51,7 +52,7 @@ exports.createCourse = async(req, res) => {
             price,
             tag,
             category: categoryDetails._id,
-            thumbnail: thumbnailImage.secure_url,
+            thumbnail: thumbnailImageRes.secure_url,
             status,
             instructions: instructions
         });
@@ -132,7 +133,7 @@ exports.getCourseDetails = async(req, res) => {
             .populate({
                 path: "instructor",
                 populate: {
-                    path: "additionalDetails"
+                    path: "additionalDetailes"
                 }
             })
             .populate({

@@ -1,6 +1,7 @@
 const User = require("../models/User");
 const mailSender = require("../utils/mailSender");
 const bcrypt = require("bcrypt");
+const crypto = require("crypto");
 
 //reset password Token
 exports.resetPasswordToken = async(req, res) => {
@@ -32,7 +33,7 @@ exports.resetPasswordToken = async(req, res) => {
         // new: true for update doc to return
 
         // make frontend link based on token
-        const url = `http://localhost:3000/update-password/${token}`;
+        const url = `http://localhost:3000/reset-password/${token}`;
         // send mail containing url
         await mailSender(
             email, 

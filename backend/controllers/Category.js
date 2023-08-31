@@ -108,7 +108,7 @@ exports.categoryPageDetails = async(req, res) => {
         // return sab
         return res.status(200).json({
             success: true,
-            message: "CategoryPage detailsFetched successfully!",
+            message: "CategoryPage details Fetched successfully!",
             data: {
                 selectedCategory,
                 differentCategories,
@@ -117,6 +117,7 @@ exports.categoryPageDetails = async(req, res) => {
         });
 
     } catch(err) {
+        console.log("Error: ", err);
         return res.status(200).json({
             success: false,
             message: "Internal Server error"
