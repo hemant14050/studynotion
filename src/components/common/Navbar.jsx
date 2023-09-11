@@ -120,7 +120,7 @@ const Navbar = () => {
             </div>
 
             {/* login/signup/dashboard */}
-            <div className='flex items-center'>
+            <div className='flex items-center gap-3'>
               {
                 token === null && (
                   <div>
@@ -146,19 +146,19 @@ const Navbar = () => {
               }
               {
                 user && (
-                  <div className="text-richblack-50 text-xl cursor-pointer">
+                  <button className="text-richblack-50 text-xl cursor-pointer">
                     <FaSearch/>
-                  </div>
+                  </button>
                 )
               }
               {
                 user && user?.accountType !== "Instuctor" && (
-                  <Link to={"/dashboard/cart"} className="relative rounded-full p-4">
+                  <Link to={"/dashboard/cart"} className="relative rounded-full">
                     <AiOutlineShoppingCart className={"text-3xl text-richblack-50"}/>
 
                     {
                       totalItems > 0 && (
-                        <div className="absolute font-semibold text-sm top-3 right-2 flex justify-center items-center w-[21px] h-[21px] p-2 rounded-full bg-richblack-25 text-caribbeangreen-400 animate-bounce">
+                        <div className="absolute font-semibold text-sm -top-1 -right-[4px] flex justify-center items-center w-[21px] h-[21px] p-2 rounded-full bg-white text-caribbeangreen-400 animate-bounce">
                           {totalItems}
                         </div>
                       )

@@ -5,7 +5,7 @@ import {ImTree} from "react-icons/im";
 const LearnCard = ({heading, description, level, lessionNumber, active}) => {
 
   return (
-    <div className={`${active? "bg-white shadow-[10px_10px_yellow] text-richblack-800":"bg-richblack-800 text-white"} w-[360px] relative min-h-[300px] px-6 pt-8 pb-4 flex flex-col justify-between cursor-pointer`}>
+    <div className={`${active? "bg-white shadow-[10px_10px_yellow] text-richblack-800":"bg-richblack-800 text-white"} md:w-[360px] relative min-h-[300px] px-6 pt-8 pb-4 flex flex-col justify-between cursor-pointer`}>
         <div className=''>
             <div className='text-[20px] font-[600]'>
                 {heading}
