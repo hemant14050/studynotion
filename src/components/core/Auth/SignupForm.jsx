@@ -3,7 +3,8 @@ import { toast } from "react-hot-toast";
 import { AiOutlineEyeInvisible, AiOutlineEye } from "react-icons/ai";
 import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
-import { setIsLoggedIn } from "../../store/slices/authSlice";
+import {setSignupData} from "../../../store/slices/authSlice";
+import { sendotp } from "../../../services/operations/authAPI";
 
 const SignupForm = () => {
   const dispatch = useDispatch();
@@ -15,6 +16,7 @@ const SignupForm = () => {
     password: "",
     confirmPassword: "",
   });
+  const [accountType, setAccountType] = useState("Student");
 
   const formChangeHandler = (e) => {
     // const [name, value] = e.target;
@@ -36,28 +38,19 @@ const SignupForm = () => {
       toast.error("Password do not match");
       return;
     }
-    dispatch(setIsLoggedIn(true));
 
-    const accountData = {
+    const signupData = {
       ...formData,
-    };
-
-    console.log("Sign up data:");
-    console.log(accountData);
-
-    const finalData = {
-      ...accountData,
       accountType,
     };
 
-    console.log("final data:");
-    console.log(finalData);
+    dispatch(setSignupData(signupData));
+    dispatch(sendotp(signupData.email, navigate));
+    
+    // console.log("final data:");
+    // console.log(signupData);
 
-    toast.success("Account Created");
-    navigate("/dashboard");
   };
-
-  const [accountType, setAccountType] = useState("student");
 
   return (
     <div>
@@ -65,10 +58,10 @@ const SignupForm = () => {
       <div className="flex mt-6 bg-richblack-800 rounded-full text-richblack-200 max-w-max gap-x-1 my-6 p-1 border-b-[2px] border-b-richblack-700">
         <button
           onClick={() => {
-            setAccountType("student");
+            setAccountType("Student");
           }}
           className={`${
-            accountType === "student"
+            accountType === "Student"
               ? "bg-richblack-900 text-richblack-5"
               : "bg-transparent text-richblack-200"
           } py-2 px-5 rounded-full transition-all duration-200`}
@@ -77,10 +70,10 @@ const SignupForm = () => {
         </button>
         <button
           onClick={() => {
-            setAccountType("instructor");
+            setAccountType("Instructor");
           }}
           className={`${
-            accountType === "instructor"
+            accountType === "Instructor"
               ? "bg-richblack-900 text-richblack-5"
               : "bg-transparent text-richblack-200"
           } py-2 px-5 rounded-full transition-all duration-200`}
@@ -138,7 +131,7 @@ const SignupForm = () => {
             id="email"
             onChange={formChangeHandler}
             value={formData.email}
-            placeholder="Enter Email Address"
+            placeholder="Enter your Email"
             className="bg-richblack-800 rounded-[0.5rem] text-richblack-5 w-full p-[12px] border-b-[3px] border-b-richblack-700"
           />
         </label>

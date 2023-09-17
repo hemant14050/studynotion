@@ -2,8 +2,8 @@ import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { AiOutlineEyeInvisible, AiOutlineEye } from "react-icons/ai";
 import { toast } from "react-hot-toast";
-import { setIsLoggedIn } from "../../store/slices/authSlice";
 import { useDispatch } from "react-redux";
+import { login } from "../../../services/operations/authAPI";
 
 const LoginForm = () => {
   const dispatch = useDispatch();
@@ -22,16 +22,16 @@ const LoginForm = () => {
     setFormData((prevData) => ({
       ...prevData,
       [e.target.name]: e.target.value,
-    }));
+    }));  
   };
 
   const submitHandler = (e) => {
     e.preventDefault();
-    dispatch(setIsLoggedIn(true));
-
-    toast.success("Logged In");
-
-    navigate("/dashboard");
+    if(!formData.email || !formData.password) {
+      toast.error("All fields are required!");
+      return;
+    }
+    dispatch(login(formData, navigate));
   };
 
   return (
@@ -47,6 +47,7 @@ const LoginForm = () => {
           id="email"
           value={formData.email}
           onChange={formChangeHandler}
+          placeholder="Enter your Email"
           className="bg-richblack-800 rounded-[0.5rem] text-richblack-5 w-full p-[12px] border-b-[3px] border-b-richblack-700"
         />
       </label>
@@ -57,6 +58,7 @@ const LoginForm = () => {
         </p>
         <input
           required
+          placeholder="Enter your Password"
           type={showPass ? "text" : "password"}
           name="password"
           id="password"
@@ -78,8 +80,8 @@ const LoginForm = () => {
         </span>
       </label>
 
-      <Link to="#" className="text-blue-100 max-w-full ml-auto right-0 text-s">
-        Forgot Password ?
+      <Link to={"/forgot-password"} className="text-blue-100 max-w-full ml-auto right-0 text-s">
+        Forgot Password?
       </Link>
 
       <button className="bg-yellow-50 rounded-[8px] font-medium text-richblack-900 px-[12px] py-[8px] mt-6">

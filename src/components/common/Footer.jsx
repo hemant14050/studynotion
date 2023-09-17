@@ -89,8 +89,15 @@ const Footer = () => {
             </div>
         </div>
         
-        <div className='mx-auto'>
-            Made with ❤️ by Hemant Patil
+        <div className='mx-auto text-center flex justify-center flex-col md:flex-row border-t w-full pt-5 gap-[.5rem]'>
+            <p>Made with ❤️ by 
+                <Link to={"https://www.linkedin.com/in/hemant14050/"}
+                className={"underline ml-[.5rem]"}
+                >
+                 Hemant Patil
+                </Link>
+            </p> 
+            <p>© 2023 StudyNotion</p>
         </div>
     </div>
   )

@@ -4,43 +4,15 @@ import {GiHamburgerMenu} from "react-icons/gi";
 import {FaChevronDown, FaSearch} from "react-icons/fa";
 import {NavbarLinks} from "../../data/navbar-links";
 import { useLocation } from 'react-router-dom';
-import { useSelector, useDispatch } from "react-redux";
-import { setToken } from "../../store/slices/authSlice";
-import { setUser } from "../../store/slices/profileSlice";
-import { setTotalItems } from "../../store/slices/cartSlice";
-import {AiOutlineShoppingCart} from "react-icons/ai";
+import { useSelector } from "react-redux";
 import ProfileDropDown from "../core/Auth/ProfileDropDown";
 import { useEffect, useState } from "react";
 import { apiConnector } from "../../services/apiConnector";
-import { categories } from "../../services/api";
-
-
-const userData = {
-  "_id": "64ef077ed46e2fcf453ae5fc",
-  "firstName": "Hemant",
-  "lastName": "Patil",
-  "email": "patilhemant14050@gmail.com",
-  "accountType": "Instructor",
-  "active": true,
-  "approved": true,
-  "additionalDetailes": {
-      "_id": "64ef077ed46e2fcf453ae5fa",
-      "gender": "",
-      "dateOfBirth": "29.10.2002",
-      "about": "Hello, my name is Hemant and I am a DEV. I have 2 years of experience in Backend Developement and specialize in Authentication and Authorization. I am passionate about Cloud and have worked on Studynotion. Please feel free to contact me for any inquiries or collaborations!",
-      "contactNumber": 125648959,
-      "__v": 0
-  },
-  "courses": [
-      "64ef0d25987c54f05e4175aa"
-  ],
-  "image": "https://res.cloudinary.com/die361uef/image/upload/v1693386750/StudyNotion/ytmg7wf7xphk1ekubtyz.png",
-  "courseProgress": [],
-  "createdAt": "2023-08-30T09:10:22.874Z",
-  "updatedAt": "2023-08-30T09:34:29.471Z",
-  "__v": 0,
-  "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InBhdGlsaGVtYW50MTQwNTBAZ21haWwuY29tIiwiaWQiOiI2NGVmMDc3ZWQ0NmUyZmNmNDUzYWU1ZmMiLCJhY2NvdW50VHlwZSI6Ikluc3RydWN0b3IiLCJpYXQiOjE2OTQ0MDQ5ODcsImV4cCI6MTY5NDQ5MTM4N30.mA1pTG2Ph0KWMT_WOM0230CN7gFteyqbtPh3iKeFQho"
-}
+import { categories } from "../../services/apis";
+import { useRef } from 'react';
+import useOnClickOutside from "../../hooks/useOnClickOutside";
+import NavCart from "./NavCart";
+import {toast} from "react-hot-toast";
 
 const Navbar = () => {
   const location = useLocation();
@@ -56,34 +28,38 @@ const Navbar = () => {
 
   const fetchSubLinks = async() => {
     try {
-      const response = await apiConnector({method:"GET", url:categories.CATEGORIES_API});
+      const response = await apiConnector("GET", categories.CATEGORIES_API);
       // console.log(response.data.data);
       setSubLinks(response.data.data);
 
     } catch(err) {  
-      alert("An error occured while fetching categories list",err);
+      toast.error("An error occured while fetching categories list");
       // console.log(err.response);
-      console.log(err.response.data);
+      // console.log(err.response.data);
     }
-}
+  }
 
   const {token} = useSelector((state) => state.auth);
   const {user} = useSelector((state) => state.profile);
-  const {totalItems} = useSelector((state) => state.cart);
 
-  const dispatch = useDispatch();
+  const [open, setOpen] = useState(false);
+  const ref = useRef();
+  useOnClickOutside(ref, ()=> setOpen(false));
+
+  const [isCatalogOpen, setIsCatalogOpen] = useState(false);
+  
 
   return (
     <div className='h-16 border-b-[1px] text-richblack-50 border-richblack-700
     flex items-center justify-center transition-all duration-200
     '>
-        <div className='w-11/12 max-w-maxContent flex justify-between items-center'>
-            <Link to={"/"} onClick={()=>{dispatch(setTotalItems(5)); dispatch(setToken(1333)); dispatch(setUser(userData))}} >
+        <div className='w-11/12 max-w-maxContent flex justify-between items-center transition-all duration-200'>
+            <Link to={"/"}>
               <img src={Logo} alt='logo' width={160} loading='lazy' />
             </Link>
 
             {/* navlinks */}
-            <div className='lg:flex gap-7 hidden'>
+            <div className='lg:flex gap-7 hidden transition-all duration-200'>
               {
                 NavbarLinks.map((item, index)=> {
                     if(item.title !== "Catalog") {
@@ -94,11 +70,11 @@ const Navbar = () => {
                     )}
                     else {
                       return (
-                          <div key={index} className='flex relative group cursor-pointer items-center gap-2 '>
+                          <div key={index} className='flex relative group cursor-pointer items-center gap-2 transition-all duration-200'>
                             {item.title}
                             <FaChevronDown/>
 
-                            <div className="invisible transition-all duration-200 opacity-0 group-hover:visible group-hover:opacity-[100%] absolute w-[280px] flex flex-col items-center top-10 left-[50%] -translate-x-[50%] z-50 rounded-lg bg-richblack-25 text-richblack-800 p-4">
+                            <div className="invisible transition-all duration-200 opacity-0 group-hover:visible group-hover:opacity-[100%] absolute w-[280px] flex flex-col items-center top-10 left-[59%] -translate-x-[41%] z-50 rounded-lg bg-richblack-25 text-richblack-800 p-4">
                             {
                               subLinks.map((link, index) => {
                                 return <Link to={"/"} key={index} className={"w-full"}>
@@ -120,7 +96,7 @@ const Navbar = () => {
             </div>
 
             {/* login/signup/dashboard */}
-            <div className='flex items-center gap-3'>
+            <div className='flex items-center gap-3 transition-all duration-200'>
               {
                 token === null && (
                   <div>
@@ -138,41 +114,83 @@ const Navbar = () => {
                       </Link>
                     </div>
 
-                    <div className='lg:hidden text-2xl cursor-pointer'>
+                    <div 
+                    onClick={() => setOpen(!open)}
+                    className='lg:hidden text-2xl relative cursor-pointer transition-all duration-200'>
                         <GiHamburgerMenu />
+
+                        {
+                          open && 
+                          <div 
+                          onClick={(e) => e.stopPropagation()}
+                          ref={ref}
+                          className='text-lg p-3 absolute top-10 right-0 z-10 bg-richblack-900 border border-richblack-600 rounded-lg flex flex-col gap-2 justify-center min-w-fit w-[130px]'>
+                            {
+                              NavbarLinks.map((item, index)=> {
+                                  if(item.title !== "Catalog") {
+                                    return (
+                                    <Link key={index} to={item.path} className={`${matchRoute(item.path)? "text-yellow-25":"text-richblack-50"}`}>
+                                      {item.title}
+                                    </Link>
+                                  )}
+                                  else {
+                                    return (
+                                        <div key={index} className="transition-all duration-200">
+                                        <div 
+                                        onClick={()=>setIsCatalogOpen(!isCatalogOpen)}
+                                        className='flex relative group cursor-pointer items-center gap-2 '>
+                                          {item.title}
+                                          <FaChevronDown/>                                          
+                                        </div>
+
+                                        {isCatalogOpen && 
+                                          <ul className="transition-all duration-200 ">
+                                            {
+                                              subLinks.map((link, index) => {
+                                                return <Link to={"/"} key={index} className={"w-full"}>
+                                                  <li className="w-full flex z-50 hover:bg-richblack-600 rounded-lg p-2 pb-1 ml-3">
+                                                    {link.name}
+                                                  </li>
+                                                </Link>
+                                              })
+                                            }
+                                          </ul>}
+                                        </div>
+                                    )
+                                  }
+                              })
+                            }
+                            <Link to="/login" className={`${matchRoute('/login')? "text-yellow-25":"text-richblack-50"}`}>
+                              Login
+                            </Link>
+
+                            <Link to="/signup" className={`${matchRoute('/signup')? "text-yellow-25":"text-richblack-50"}`}>
+                              Singup
+                            </Link>
+                          </div>
+                        }
                     </div>
                   </div>
                 )
               }
               {
-                user && (
+                token && user && (
                   <button className="text-richblack-50 text-xl cursor-pointer">
                     <FaSearch/>
                   </button>
                 )
               }
               {
-                user && user?.accountType !== "Instuctor" && (
-                  <Link to={"/dashboard/cart"} className="relative rounded-full">
-                    <AiOutlineShoppingCart className={"text-3xl text-richblack-50"}/>
-
-                    {
-                      totalItems > 0 && (
-                        <div className="absolute font-semibold text-sm -top-1 -right-[4px] flex justify-center items-center w-[21px] h-[21px] p-2 rounded-full bg-white text-caribbeangreen-400 animate-bounce">
-                          {totalItems}
-                        </div>
-                      )
-                    }
-                  </Link>
+                token && user && user?.accountType !== "Instuctor" && (
+                  <NavCart />
                 ) 
               }
 
               {
-                user && (
-                  <ProfileDropDown user={user}/>
+                token && user && (
+                  <ProfileDropDown />
                 )
               }
-
               
             </div>
         </div>

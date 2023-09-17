@@ -3,9 +3,10 @@ import { Navigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 
 function PrivateRoute({ children }) {
-  const {isLoggedIn} = useSelector((state) => state.auth);
+  const {token} = useSelector((state) => state.auth);
+  const {user} = useSelector((state) => state.profile);
 
-  if(isLoggedIn) {
+  if(token && user) {
     return children;
   } else {
     return <Navigate to="/login" />;

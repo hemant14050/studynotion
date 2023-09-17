@@ -1,6 +1,6 @@
 import React from "react";
-import LoginForm from "../forms/LoginForm";
-import SignupForm from "../forms/SignupForm";
+import LoginForm from "../core/Auth/LoginForm";
+import SignupForm from "../core/Auth/SignupForm";
 import frameImage from "../../assets/Images/frame.png";
 import { FcGoogle } from "react-icons/fc";
 
