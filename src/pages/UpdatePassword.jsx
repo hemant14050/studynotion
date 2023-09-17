@@ -47,7 +47,9 @@ const UpdatePassword = () => {
 
     return (
         loading?
-        (<Loader/>):
+        (<div className='flex min-h-[calc(100vh-4.2rem)] w-11/12 mx-auto justify-center items-center'>
+            <Loader/>
+        </div>):
         (<div className='flex min-h-[calc(100vh-4.2rem)] w-11/12 max-w-[450px] mx-auto justify-center items-center text-richblack-25'>
             <div className='w-full max-w-[450px] flex flex-col gap-3'>
                 <h1

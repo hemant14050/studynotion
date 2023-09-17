@@ -9,7 +9,9 @@ const Login = () => {
 
   return (
       loading?
-      (<Loader />):
+      (<div className='flex min-h-[calc(100vh-4.2rem)] w-11/12 mx-auto justify-center items-center'>
+        <Loader/>
+      </div>):
       (<Template
         title="Welcome Back"
         desc1="Build skills for today, tomorrow, and beyond."

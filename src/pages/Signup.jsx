@@ -9,7 +9,9 @@ const Signup = () => {
 
   return (
     loading?
-    (<Loader/>):
+    (<div className='flex min-h-[calc(100vh-4.2rem)] w-11/12 mx-auto justify-center items-center'>
+        <Loader/>
+    </div>):
     (<Template
       title="Join the millions learning to code with StudyNotion for free"
       desc1="Build skills for today, tomorrow, and beyond."
