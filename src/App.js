@@ -11,6 +11,7 @@ import VerifyEmail from "./pages/VerifyEmail";
 import CheckSignUpData from "./components/core/CheckSignUpData";
 import UpdatePassword from "./pages/UpdatePassword";
 import Error from "./pages/Error";
+import Contact from "./pages/Contact";
 
 function App() {
 
@@ -19,6 +20,7 @@ function App() {
       <Navbar/>
       <Routes>
         <Route index path="/" element={<Home />} />
+        <Route path="/contact" element={<Contact />} />
         <Route path="/login" element={<Login/>} />
         <Route path="/signup" element={<Signup/>} />
         <Route path="/forgot-password" element={<ForgotPassword/>} />
