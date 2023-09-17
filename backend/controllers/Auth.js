@@ -70,10 +70,10 @@ exports.signUp = async(req, res) => {
 
         // fetch data from req body
         const {firstName, lastName, email, password, confirmPassword, accountType, contactNumber, otp} = req.body;
-        console.log("Printing: ", confirmPassword, otp);
+        // console.log("Printing: ", confirmPassword, otp);
 
         // validate data
-        if(!firstName || !lastName || !email || !password || !confirmPassword || !accountType || !contactNumber || !otp) {
+        if(!firstName || !lastName || !email || !password || !confirmPassword || !accountType || !otp) {
             return res.status(403).json({
                 success: false,
                 message: "All fields are required",
@@ -226,7 +226,7 @@ exports.changePassword = async(req, res) => {
         // get oldPassword, newPassword, confirmNewPassword
         const {oldPassword, newPassword, confirmNewPassword} = req.body;
         // validation
-        if(!email || !oldPassword || !newPassword || !confirmNewPassword) {
+        if(!req.user.email || !oldPassword || !newPassword || !confirmNewPassword) {
             return res.status(401).json({
                 success: false,
                 message: "All fields are required"
@@ -245,7 +245,7 @@ exports.changePassword = async(req, res) => {
                 message: "User does not exists"
             });
         }
-        if(await bcrypt.compare(userDetails.password, password)) {
+        if(await bcrypt.compare(userDetails.password, oldPassword)) {
             const hashedNewPassword = await bcrypt.hash(newPassword, 10);
             // update in db by encrypting
             const upadatedUserDetails = await User.findOneAndUpdate(req.user.id,

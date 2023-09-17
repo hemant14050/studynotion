@@ -28,7 +28,7 @@ exports.resetPasswordToken = async(req, res) => {
         // update user by adding token and expiration
         const updatedUserDetails = await User.findOneAndUpdate({email: email}, {
             token: token,
-            resetPasswordToken: Date.now() + 2*60*60*1000,
+            resetPasswordTokenExpires: Date.now() + 2*60*60*1000,
         }, {new: true});
         // new: true for update doc to return
 
@@ -58,15 +58,15 @@ exports.resetPasswordToken = async(req, res) => {
 exports.resetPassword = async(req, res) => {
     try {
         // data fetch
-        const {password, confirmPassword, token} = req.body;
+        const {newPassword, confirmNewPassword, token} = req.body;
         // validation
-        if(!password || !confirmPassword) {
+        if(!newPassword || !confirmNewPassword) {
             return res.status(401).json({
                 success: false,
                 message: "All fields are required"
             })
         }
-        if(password !== confirmPassword) {
+        if(newPassword !== confirmNewPassword) {
             return res.status(401).json({
                 success: false,
                 message: "Password and confirm password should match"
@@ -82,21 +82,31 @@ exports.resetPassword = async(req, res) => {
             });
         }
         // check token expires
-        if(userDetails.resetPasswordExpires < Date.now()) {
+        if(userDetails.resetPasswordTokenExpires < Date.now()) {
             return res.status(403).json({
                 success: false,
                 message: "Token expired, please regenerate"
             });
         }
         // hashPassword
-        const hashedPassword = await bcrypt.hash(password, 10);
+        const hashedPassword = await bcrypt.hash(newPassword, 10);
         // update password in db
         await User.findOneAndUpdate({token: token}, 
-            {password: hashedPassword},
+            {
+                password: hashedPassword,
+                token: null,
+                resetPasswordTokenExpires: null,
+            },
             {new: true});
+        
+        const indexOfAt = userDetails.email.indexOf("@");
+        const toReplace = userDetails.email.substring(2, indexOfAt);
+        const encodedEmail = userDetails.email.replace(toReplace, "*".repeat(toReplace.length));
         // return response
+        
         return res.status(200).json({
-            success: false,
+            success: true,
+            encodedEmail,
             message: "Password reset successfully!"
         });
 
