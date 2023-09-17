@@ -16,7 +16,7 @@ const Home = () => {
     const [activeIndex, setActiveIndex] = useState(0);
     const [activeDataIndex, setActiveDataIndex] = useState(0);
   return (
-    <div>
+    <>
         {/* section 1 */}
         <div className='relative mx-auto flex flex-col max-w-maxContent w-11/12 items-center text-white justify-between'>
             {/* button */}
@@ -233,11 +233,9 @@ const Home = () => {
         </div>
 
         {/* footer */}
-        <div className='bg-richblack-800 mx-auto'>
-            <Footer/>
-        </div>
+        <Footer/>
 
-    </div>
+    </>
   )
 }
 
