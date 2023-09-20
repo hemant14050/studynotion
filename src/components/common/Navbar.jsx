@@ -51,7 +51,7 @@ const Navbar = () => {
 
   return (
     <div className='h-16 border-b-[1px] text-richblack-50 border-richblack-700
-    flex items-center justify-center transition-all duration-200
+    flex items-center justify-center transition-all duration-200 bg-richblack-800
     '>
         <div className='w-11/12 max-w-maxContent flex justify-between items-center transition-all duration-200'>
             <Link to={"/"}>

@@ -227,7 +227,7 @@ const Home = () => {
         <div className='bg-richblack-900 text-white w-11/12 mx-auto max-w-maxContent flex flex-col items-center justify-between gap-8'>
             <InstructorSection/>
 
-            <h2 className='text-center text-4xl font-semibold mt-10'>Review from Other Learners</h2>
+            <h2 className='text-center text-4xl font-bold mt-10'>Review from Other Learners</h2>
 
             {/* <ReviewSlider/> */}
         </div>

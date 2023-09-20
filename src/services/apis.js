@@ -11,3 +11,10 @@ export const authEndpoints = {
 export const categories = {
     CATEGORIES_API: BASE_URL + "/course/showAllCategories",
 }
+
+export const settingsEndpoints = {
+    UPDATE_PROFILE_PICTURE_API: BASE_URL + "/profile/updateProfilePicture",
+    UPDATE_PROFILE_DATA_API: BASE_URL + "/profile/updateProfile",
+    CHANGE_PASSWORD_API: BASE_URL + "/auth/changepassword",
+    DELETE_ACCOUNT_API: BASE_URL + "/profile/deleteProfile"
+}

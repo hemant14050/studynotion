@@ -12,6 +12,9 @@ import CheckSignUpData from "./components/core/CheckSignUpData";
 import UpdatePassword from "./pages/UpdatePassword";
 import Error from "./pages/Error";
 import Contact from "./pages/Contact";
+import About from "./pages/About";
+import MyProfile from "./components/core/Dashboard/MyProfile";
+import Settings from "./components/core/Dashboard/Settings";
 
 function App() {
 
@@ -21,6 +24,7 @@ function App() {
       <Routes>
         <Route index path="/" element={<Home />} />
         <Route path="/contact" element={<Contact />} />
+        <Route path="/about" element={<About />} />
         <Route path="/login" element={<Login/>} />
         <Route path="/signup" element={<Signup/>} />
         <Route path="/forgot-password" element={<ForgotPassword/>} />
@@ -29,7 +33,10 @@ function App() {
           <PrivateRoute>
             <Dashboard/>
           </PrivateRoute>
-        } />
+        }>
+            <Route path="my-profile" element={<MyProfile /> } />
+            <Route path="settings" element={<Settings /> } />
+        </Route>
 
         <Route path="/verify-email" element={
           <CheckSignUpData>

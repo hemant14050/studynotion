@@ -166,3 +166,18 @@ export const resetPassword = ({newPassword, confirmNewPassword, token,}, setSucc
         dispatch(setLoading(false));
     }
 }
+
+export const logout = (navigate) => {
+    return async(dispatch) => {
+        // const toastId = toast.loading("Loading...");
+        // dispatch(setLoading(true));
+        dispatch(setLoading(false));
+        dispatch(setToken(null));
+        dispatch(setUser(null));
+        
+        toast.success("Logged out successfully!");
+        navigate("/login");
+        // toast.dismiss(toastId);
+        // dispatch(setLoading(false));
+    }
+}

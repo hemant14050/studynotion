@@ -5,6 +5,7 @@ import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import {setSignupData} from "../../../store/slices/authSlice";
 import { sendotp } from "../../../services/operations/authAPI";
+import {ACCOUNT_TYPE} from "../../../utils/constants";
 
 const SignupForm = () => {
   const dispatch = useDispatch();
@@ -16,7 +17,7 @@ const SignupForm = () => {
     password: "",
     confirmPassword: "",
   });
-  const [accountType, setAccountType] = useState("Student");
+  const [accountType, setAccountType] = useState(ACCOUNT_TYPE.STUDENT);
 
   const formChangeHandler = (e) => {
     // const [name, value] = e.target;
@@ -58,10 +59,10 @@ const SignupForm = () => {
       <div className="flex mt-6 bg-richblack-800 rounded-full text-richblack-200 max-w-max gap-x-1 my-6 p-1 border-b-[2px] border-b-richblack-700">
         <button
           onClick={() => {
-            setAccountType("Student");
+            setAccountType(ACCOUNT_TYPE.STUDENT);
           }}
           className={`${
-            accountType === "Student"
+            accountType === ACCOUNT_TYPE.STUDENT
               ? "bg-richblack-900 text-richblack-5"
               : "bg-transparent text-richblack-200"
           } py-2 px-5 rounded-full transition-all duration-200`}
@@ -70,10 +71,10 @@ const SignupForm = () => {
         </button>
         <button
           onClick={() => {
-            setAccountType("Instructor");
+            setAccountType(ACCOUNT_TYPE.INSTRUCTOR);
           }}
           className={`${
-            accountType === "Instructor"
+            accountType === ACCOUNT_TYPE.INSTRUCTOR
               ? "bg-richblack-900 text-richblack-5"
               : "bg-transparent text-richblack-200"
           } py-2 px-5 rounded-full transition-all duration-200`}
