@@ -245,10 +245,10 @@ exports.changePassword = async(req, res) => {
                 message: "User does not exists"
             });
         }
-        if(await bcrypt.compare(userDetails.password, oldPassword)) {
+        if(await bcrypt.compare(oldPassword, userDetails.password)) {
             const hashedNewPassword = await bcrypt.hash(newPassword, 10);
             // update in db by encrypting
-            const upadatedUserDetails = await User.findOneAndUpdate(req.user.id,
+            const upadatedUserDetails = await User.findByIdAndUpdate(req.user.id,
                 {password: hashedNewPassword},
                 {new: true});
 
@@ -270,14 +270,14 @@ exports.changePassword = async(req, res) => {
             }
                 
             return res.status(200).json({
-                success: false,
+                success: true,
                 message: "Password updated successfully!"
             });
 
         } else {
             return res.status(401).json({
                 success: false,
-                message: "Password is incorrect!"
+                message: "Current is password is incorrect!"
             });
         }
         // update in db by encrypting
