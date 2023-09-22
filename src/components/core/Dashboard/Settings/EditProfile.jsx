@@ -37,7 +37,7 @@ const EditProfile = () => {
             onSubmit={handleSubmit}
             className='w-full'
             >
-            <div className='bg-richblack-800 justify-between items-center px-5 py-8 rounded-lg border-[1px] border-richblack-700'>
+            <div className='bg-richblack-800 justify-between items-center px-5 py-8 md:px-8 rounded-lg border-[1px] border-richblack-700'>
                 <div className='flex justify-between w-full items-center gap-6'>
                     <p
                     className='text-xl text-richblack-5'

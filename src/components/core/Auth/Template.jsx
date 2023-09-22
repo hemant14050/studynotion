@@ -1,7 +1,7 @@
 import React from "react";
-import LoginForm from "../core/Auth/LoginForm";
-import SignupForm from "../core/Auth/SignupForm";
-import frameImage from "../../assets/Images/frame.png";
+import LoginForm from "./LoginForm";
+import SignupForm from "./SignupForm";
+import frameImage from "../../../assets/Images/frame.png";
 import { FcGoogle } from "react-icons/fc";
 
 function Template({ title, desc1, desc2, image, formtype }) {

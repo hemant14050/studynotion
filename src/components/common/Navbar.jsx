@@ -76,7 +76,7 @@ const Navbar = () => {
 
                             <div className="invisible transition-all duration-200 opacity-0 group-hover:visible group-hover:opacity-[100%] absolute w-[280px] flex flex-col items-center top-10 left-[59%] -translate-x-[41%] z-50 rounded-lg bg-richblack-25 text-richblack-800 p-4">
                             {
-                              subLinks.map((link, index) => {
+                              subLinks?.map((link, index) => {
                                 return <Link to={"/"} key={index} className={"w-full"}>
                                   <div className="w-full flex z-50 hover:bg-richblack-100 px-6 py-3 rounded-lg">
                                     {link.name}

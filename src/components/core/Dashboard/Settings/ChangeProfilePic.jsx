@@ -49,7 +49,7 @@ const ChangeProfilePic = () => {
 
     return (
         <>
-            <div className='bg-richblack-800 flex items-center px-5 py-10 rounded-lg border-[1px] border-richblack-700'>
+            <div className='bg-richblack-800 flex items-center px-5 py-10 md:px-10 rounded-lg border-[1px] border-richblack-700'>
                 <div className='flex items-center gap-6'>
                     <img 
                     src={previewFile || user?.image} 

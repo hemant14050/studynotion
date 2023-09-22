@@ -1,5 +1,5 @@
 import React from "react";
-import Template from "../components/core/Template";
+import Template from "../components/core/Auth/Template";
 import loginImage from "../assets/Images/login.webp";
 import {useSelector} from "react-redux";
 import Loader from "../components/common/Loader";

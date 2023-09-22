@@ -14,7 +14,7 @@ const MyProfile = () => {
             className='text-richblack-5 text-4xl mb-10'
             >My Profile</h1>
             <div className='flex flex-col gap-10'>
-                <div className='bg-richblack-800 flex justify-between items-center px-5 py-10 rounded-lg border-[1px] border-richblack-700 relative'>
+                <div className='bg-richblack-800 flex justify-between items-center px-5 py-10 md:px-10 rounded-lg border-[1px] border-richblack-700 relative'>
                     <div className='flex items-center gap-6'>
                         <img src={user?.image} alt={`profile-${user?.firstName}`}
                         width={78}
@@ -41,7 +41,7 @@ const MyProfile = () => {
                     </div>
                 </div>
 
-                <div className='bg-richblack-800 justify-between items-center px-5 py-10 relative rounded-lg border-[1px] border-richblack-700'>
+                <div className='bg-richblack-800 justify-between items-center px-5 py-10 md:px-10 relative rounded-lg border-[1px] border-richblack-700'>
                     <div className='flex justify-between w-full items-center gap-6'>
                         <p
                         className='text-xl text-richblack-5'
@@ -67,7 +67,7 @@ const MyProfile = () => {
                     
                 </div>
 
-                <div className='bg-richblack-800 justify-between items-center px-5 py-10 relative rounded-lg border-[1px] border-richblack-700'>
+                <div className='bg-richblack-800 justify-between items-center px-5 py-10 md:px-10 relative rounded-lg border-[1px] border-richblack-700'>
                     <div className='flex justify-between w-full items-center gap-6'>
                         <p
                         className='text-xl text-richblack-5'

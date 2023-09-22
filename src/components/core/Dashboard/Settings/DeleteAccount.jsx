@@ -11,7 +11,7 @@ const DeleteAccount = () => {
 
     return (
         <>
-            <div className='bg-pink-900 flex items-center px-5 py-8 rounded-lg border-[1px] border-pink-600'>
+            <div className='bg-pink-900 flex items-center px-5 py-8 md:px-8 rounded-lg border-[1px] border-pink-600'>
             
             <div className='flex gap-7'>
                 <div className='text-pink-700 flex justify-center items-center w-[60px] h-[60px] rounded-full bg-pink-300 p-3'>
