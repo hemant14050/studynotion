@@ -34,8 +34,10 @@ const cartSlice = createSlice({
         // remover from cart
         removeFromCart: (state, action) => {
             const courseId = action.payload;
+            console.log("here", courseId);
             const presentIndex = state.cart.findIndex((item) => item._id === courseId);
-            if(presentIndex > 0) {
+            console.log("here", presentIndex);
+            if(presentIndex >= 0) {
                 state.totalItems--;
                 state.total -= state.cart[presentIndex].price;
                 state.cart.splice(presentIndex, 1);

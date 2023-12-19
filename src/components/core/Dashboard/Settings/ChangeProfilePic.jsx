@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import {BiCloudUpload} from "react-icons/bi";
 import IconBtn from "../../../common/IconBtn";
 import { updateProfilePic } from '../../../../services/operations/settingsAPI';
+import toast from 'react-hot-toast';
 
 const ChangeProfilePic = () => {
     const dispatch = useDispatch();
@@ -29,11 +30,17 @@ const ChangeProfilePic = () => {
     }
 
     const handleFileUpload = (e) => {
+        if(!imageFile) {
+            toast.error("Please select profile pic to upload");
+            return;
+        }
         try {
             setLoading(true);
             const formData = new FormData();
             formData.append("displayPicture", imageFile);
             dispatch(updateProfilePic(user, token, formData)).then(() => {
+                setImageFile(null);
+                setPreviewFile(null);
                 setLoading(false);
             });
         } catch(error) {
@@ -79,8 +86,9 @@ const ChangeProfilePic = () => {
 
                         <IconBtn
                         text={loading ? "Uploading..." : "Upload"}
+                        disabled={loading ? true: false}
                         onClick={handleFileUpload}
-                        className={"flex justify-center"}
+                        className={`flex justify-center ${loading && "disabled:cursor-not-allowed"}`}
                         >
                             {!loading && (
                             <BiCloudUpload size={24} />
