@@ -83,7 +83,7 @@ exports.createCourse = async (req, res) => {
       instructor: instructorDetailes._id,
       whatYouWillLearn,
       price,
-      tag,
+      tags: tag,
       category: categoryDetails._id,
       thumbnail: thumbnailImageRes.secure_url,
       status: status,
@@ -262,7 +262,7 @@ exports.editCourse = async (req, res) => {
       .populate({
         path: "instructor",
         populate: {
-          path: "additionalDetails",
+          path: "additionalDetailes",
         },
       })
       .populate("category")
@@ -300,7 +300,7 @@ exports.getFullCourseDetails = async (req, res) => {
       .populate({
         path: "instructor",
         populate: {
-          path: "additionalDetails",
+          path: "additionalDetailes",
         },
       })
       .populate("category")
@@ -396,7 +396,7 @@ exports.deleteCourse = async (req, res) => {
     }
 
     // Unenroll students from the course
-    const studentsEnrolled = course.studentsEnroled;
+    const studentsEnrolled = course.studentsEnrolled;
     for (const studentId of studentsEnrolled) {
       await User.findByIdAndUpdate(studentId, {
         $pull: { courses: courseId },
