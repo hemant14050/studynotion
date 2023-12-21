@@ -5,7 +5,6 @@ import { resetCart } from "../../store/slices/cartSlice";
 import { setPaymentLoading } from "../../store/slices/courseSlice";
 import { apiConnector } from "../apiConnector";
 import { studentEndpoints } from "../apis";
-import { RAZORPAY_KEY_ID } from "../../env";
 
 const {
   COURSE_PAYMENT_API,
@@ -71,9 +70,9 @@ export async function BuyCourse(
     );
 
     // Opening the Razorpay SDK
-    // console.log("key-->>", process.env.RAZORPAY_KEY_ID)
+    // console.log("key-->>", process.env.REACT_APP_RAZORPAY_KEY_ID)
     const options = {
-      key: RAZORPAY_KEY_ID,
+      key: process.env.REACT_APP_RAZORPAY_KEY_ID,
       currency: orderResponse.data.data.currency,
       amount: `${orderResponse.data.data.amount}`,
       order_id: orderResponse.data.data.id,
