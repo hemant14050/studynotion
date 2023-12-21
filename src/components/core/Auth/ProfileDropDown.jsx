@@ -7,11 +7,13 @@ import { useRef, useState } from 'react';
 import useOnClickOutside from "../../../hooks/useOnClickOutside";
 import {BiSolidDownArrow, BiSolidUpArrow} from "react-icons/bi";
 import {logout} from "../../../services/operations/authAPI";
+import Catalog from '../../common/Catalog';
 
 const ProfileDropDown = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const {user} = useSelector((state) => state.profile);
+  const [loading, setLoading] = useState(false);
 
   const [open, setOpen] = useState(false);
   const ref = useRef();
@@ -29,11 +31,13 @@ const ProfileDropDown = () => {
           <div 
           onClick={(e) => e.stopPropagation()}
           ref={ref}
-          className='absolute top-10 right-0 z-10 bg-richblack-900 border border-richblack-600 rounded-lg flex flex-col gap-2 justify-center w-[130px]'>
+          className='absolute top-10 right-0 z-10 bg-richblack-900 border border-richblack-600 rounded-lg flex flex-col gap-2 justify-center min-w-[165px]'>
             <Link to={"/dashboard/my-profile"} className='flex text-richblack-25 border-b border-richblack-600 items-center gap-2 p-2'>
               <RiDashboard3Fill size={20} /> 
               <p>Dashboard</p>
             </Link>
+            
+            <Catalog loading={loading} setLoading={setLoading} />
 
             <div  
               onClick={() => {

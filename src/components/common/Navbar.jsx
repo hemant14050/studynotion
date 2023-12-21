@@ -14,8 +14,17 @@ import useOnClickOutside from "../../hooks/useOnClickOutside";
 import NavCart from "./NavCart";
 import { toast } from "react-hot-toast";
 import { ACCOUNT_TYPE } from "../../utils/constants";
+import Catalog from "./Catalog";
 
 const Navbar = () => {
+  const { token } = useSelector((state) => state.auth);
+  const { user } = useSelector((state) => state.profile);
+  const [loading, setLoading] = useState(false);
+
+  const [open, setOpen] = useState(false);
+  const ref = useRef();
+  useOnClickOutside(ref, () => setOpen(false));
+
   const location = useLocation();
   const matchRoute = (route) => {
     return matchPath({ path: route }, location.pathname);
@@ -29,25 +38,17 @@ const Navbar = () => {
 
   const fetchSubLinks = async () => {
     try {
+      setLoading(true);
       const response = await apiConnector("GET", categories.CATEGORIES_API);
       // console.log(response.data.data);
       setSubLinks(response.data.data);
+      setLoading(false);
     } catch (err) {
       toast.error("An error occured while fetching categories list");
-      // console.log(err.response);
+      console.log(err);
       // console.log(err.response.data);
     }
   };
-
-  const { token } = useSelector((state) => state.auth);
-  const { user } = useSelector((state) => state.profile);
-  const [loading, setLoading] = useState(false);
-
-  const [open, setOpen] = useState(false);
-  const ref = useRef();
-  useOnClickOutside(ref, () => setOpen(false));
-
-  const [isCatalogOpen, setIsCatalogOpen] = useState(false);
 
   return (
     <div
@@ -170,52 +171,7 @@ const Navbar = () => {
                         );
                       } else {
                         return (
-                          <div
-                            key={index}
-                            className="transition-all duration-200"
-                          >
-                            <div
-                              onClick={() => setIsCatalogOpen(!isCatalogOpen)}
-                              className="flex relative group cursor-pointer items-center gap-2 "
-                            >
-                              {item.title}
-                              <FaChevronDown />
-                            </div>
-
-                            {isCatalogOpen && (
-                              <ul className="transition-all duration-200 ">
-                                {loading ? (
-                                  <p className="text-center">Loading...</p>
-                                ) : subLinks.length ? (
-                                  <>
-                                    {subLinks
-                                      ?.filter(
-                                        (subLink) =>
-                                          subLink?.courses?.length > 0
-                                      )
-                                      ?.map((subLink, i) => (
-                                        <li className="pt-1 pl-2">
-                                          <Link
-                                            to={`/catalog/${subLink.name
-                                              .split(" ")
-                                              .join("-")
-                                              .toLowerCase()}`}
-                                            className="rounded-lg bg-transparent hover:bg-richblack-50"
-                                            key={i}
-                                          >
-                                            <p>{subLink.name}</p>
-                                          </Link>
-                                        </li>
-                                      ))}
-                                  </>
-                                ) : (
-                                  <p className="text-center">
-                                    No Courses Found
-                                  </p>
-                                )}
-                              </ul>
-                            )}
-                          </div>
+                          <Catalog key={index} setLoading={setLoading} loading={loading} />
                         );
                       }
                     })}
@@ -238,7 +194,7 @@ const Navbar = () => {
                           : "text-richblack-50"
                       }`}
                     >
-                      Singup
+                      Signup
                     </Link>
                   </div>
                 )}
