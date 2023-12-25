@@ -15,6 +15,7 @@ const dotenv = require("dotenv");
 
 dotenv.config();
 const PORT = process.env.PORT || 4000;
+const path = require("path");
 
 // connect to DB
 db.connectDB();
@@ -30,7 +31,9 @@ app.use(
 app.use(
   fileUpload({
     useTempFiles: true,
-    tempFileDir: "/uploads/temp",
+    // tempFileDir: "/uploads/temp",
+    tempFileDir: path.join(__dirname, "uploads/temp"),
+    preserveExtension: true,
   })
 );
 
