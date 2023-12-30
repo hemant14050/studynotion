@@ -37,7 +37,7 @@ exports.resetPasswordToken = async (req, res) => {
     // new: true for update doc to return
 
     // make frontend link based on token
-    const url = `http://localhost:3000/reset-password/${token}`;
+    const url = `${process.env.LIVE_URL}/reset-password/${token}`;
     // send mail containing url
     await mailSender(
       email,
